@@ -6,6 +6,8 @@ public class Tile {
     public final int width = 95;
     public final int height = 95;
 
+    public Entity placed;
+
     public Tile(float x, float y) {
         this.x = x;
         this.y = y;
@@ -15,12 +17,24 @@ public class Tile {
         return px >= x && px <= x + width && py >= y && py <= y + height;
     }
 
-    public void onClick() {
+    public void onClick(int Id) {
         System.out.println("Tile clciado em: " + x + y);
-        if (!occupied) {
+        if (!occupied && Id != 5 && Id != 0) {
             System.out.println("Tile vazio");
-        } else {
-            System.out.println("Tile ocupado");
+            System.out.println("Plantar oq tem no id " + Id);
         }
+    }
+
+    public void place(int id) {
+        occupied = true;
+        System.out.println("Plantando oq tem em: " + id);
+    }
+
+
+
+    public void clear() {
+        occupied = false;
+        placed = null;
+        System.out.println("Tile limpo");
     }
 }
