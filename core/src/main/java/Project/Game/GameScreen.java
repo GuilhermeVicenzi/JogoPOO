@@ -73,6 +73,13 @@ public class GameScreen {
         batch.begin();
         batch.draw(bg, 0, 0);
         batch.draw(ui, 0, 0);
+
+        for (Tile[] row : grid) {
+            for (Tile t : row) {
+                t.render(batch);
+            }
+        }
+
         batch.end();
 
         debug.begin(ShapeRenderer.ShapeType.Line);
@@ -103,13 +110,7 @@ public class GameScreen {
                 for (int c = 0; c < 9; c++) {
                     Tile tile = grid[r][c];
                     if (tile.contains(screenX, screenY)) {
-                        if (tile.occupied && selectedId == 5) {
-                            tile.clear();
-                            return;
-                        } else if (selectedId > 0 && selectedId < 5) {
-                            tile.place(selectedId);
-                            return;
-                        }
+                        tile.onClick(selectedId);
                     }
                 }
             }
