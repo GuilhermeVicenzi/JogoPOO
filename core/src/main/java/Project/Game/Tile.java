@@ -33,10 +33,11 @@ public class Tile {
     public void place(int id) {
         occupied = true;
         System.out.println("Plantando oq tem em: " + id);
-        if (id == 1) {placed = new Trash(x, y);}
-        if (id == 2) {placed = new AttackFrog(x + 14, y);}
-        if (id == 3) {placed = new ExplosiveFrog(x + 15, y);}
-        if (id == 4) {placed = new TankFrog(x, y);}
+        int money = GameManager.getMoney();
+        if (id == 1 && money >= 50) {placed = new Trash(x, y); GameManager.spendMoney(50);}
+        if (id == 2 && money >= 100) {placed = new AttackFrog(x + 14, y); GameManager.spendMoney(100);}
+        if (id == 3 && money >= 150) {placed = new ExplosiveFrog(x + 15, y); GameManager.spendMoney(150);}
+        if (id == 4 && money >= 100) {placed = new TankFrog(x, y);GameManager.spendMoney(100);}
 
         System.out.println("Agora temos : " + placed + " aqui no tile de " + x + y);
     }

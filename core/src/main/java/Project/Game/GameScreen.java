@@ -1,9 +1,12 @@
 package Project.Game;
 
+import Project.Game.Entities.Fly;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -19,8 +22,13 @@ public class GameScreen {
     Rectangle normalUI = new Rectangle(432, 561, 96, 96);
     Rectangle tankUI = new Rectangle(528, 561, 96, 96);
     Rectangle sal = new Rectangle(624, 586, 96, 75);
-
     private ArrayList<Rectangle> slots = new ArrayList<Rectangle>();
+
+    private BitmapFont font;
+
+    Array<Fly> flies = new Array<>();
+    Fly teste = new Fly(200, 200);
+
 
     private int selectedId;
 
@@ -40,6 +48,14 @@ public class GameScreen {
         slots.add(sal);
 
         createGrid();
+
+        flies.add(teste);
+        flies.add(teste);
+        flies.add(teste);
+
+        font = new BitmapFont();
+        font.getData().setScale(2f);
+        font.setColor(0,0,0,1);
     }
 
     private void createGrid() {
@@ -79,6 +95,12 @@ public class GameScreen {
                 t.render(batch);
             }
         }
+        for (Fly fly : flies) {
+            fly.render(batch);
+        }
+
+        font.draw(batch, "" + GameManager.getMoney(), 165, 590);
+        font.draw(batch, "Pontuação: " + GameManager.getScore(), 1075,650);
 
         batch.end();
 
@@ -105,6 +127,18 @@ public class GameScreen {
         if (Gdx.input.justTouched()) {
             int screenX = Gdx.input.getX();
             int screenY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+
+            for (int i = flies.size - 1; i >= 0; i--) {
+                Fly fly = flies.get(i);
+
+                if (fly.isClicked(screenX, screenY)) {
+                    GameManager.addMoney(50);
+                    flies.removeIndex(i);
+                    System.out.println("Coletou uma mosca, dinheiro agora é " + GameManager.getMoney());
+                }
+            }
+
 
             for (int r = 0; r < 5; r++) {
                 for (int c = 0; c < 9; c++) {
