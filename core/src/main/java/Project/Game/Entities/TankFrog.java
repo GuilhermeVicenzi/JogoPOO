@@ -10,10 +10,27 @@ public class TankFrog extends Entity {
     private Animation<TextureRegion> idleAnimation;
     private Animation<TextureRegion> damagedAnimation;
 
-    public TankFrog(float x, float y) {
-        super(x, y, 96, 96);
-        this.health = 500;
+    // 🛑 NOVO: Variável para armazenar o limite de HP para a animação de Dano.
+    private final float DAMAGED_LIMIT;
 
+    // 🛑 NOVO: Constante para definir a porcentagem de vida para o estado "Damaged" (50%)
+    private static final float DAMAGED_THRESHOLD = 0.50f;
+
+    public TankFrog(float x, float y) {
+        // Bounds 96x96 (Correto, não requer offset de render)
+        super(x, y, 96, 96);
+
+        // 🛑 CORREÇÃO/AJUSTE: Usa float explicitamente e armazena a vida máxima
+        this.health = 500.0f;
+
+        // 🛑 NOVO: Calcula o limite de HP (350 * 0.5 = 175.0f)
+        this.DAMAGED_LIMIT = this.health * DAMAGED_THRESHOLD;
+
+        this.isAttacking = false; // Garante o estado inicial
+        this.moveSpeed = 0.0f; // O sapo NUNCA se move
+        this.damage = 0.0f; // Usa float
+
+        // --- Carregamento de Texturas (Sem alterações) ---
         Texture idleSheet = new Texture("FrogTank/Frog-Tank-FullLife.png");
         Texture damagedSheet = new Texture("FrogTank/Frog-Tank-Damaged.png");
 
@@ -39,11 +56,28 @@ public class TankFrog extends Entity {
 
     @Override
     public void update(float dt) {
-        super.update(dt);
+        super.update(dt); // Chama a lógica da Entity (timers)
 
-        if (health < 250) {
-            setAnimation(damagedAnimation);
+        // LÓGICA DE TRANSIÇÃO DE ANIMAÇÃO
+        if (!isAlive()) {
+            // A lógica de limpeza e animação de morte é tratada pela Entity/GameScreen
+        }
+        else {
+            // 🛑 LÓGICA CRÍTICA: Checa se o HP caiu abaixo do limite de dano
+            if (this.health <= this.DAMAGED_LIMIT) {
+
+                // Se a vida está baixa, force a animação de DANO
+                if (currentAnimation != damagedAnimation) {
+                    setAnimation(damagedAnimation);
+                }
+
+            } else {
+
+                // Se a vida está acima do limite, use a animação IDLE (Vida Cheia)
+                if (currentAnimation != idleAnimation) {
+                    setAnimation(idleAnimation);
+                }
+            }
         }
     }
-
 }

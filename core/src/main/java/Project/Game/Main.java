@@ -1,9 +1,10 @@
 package Project.Game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+// Project/Game/Main.java
 
 public class Main extends ApplicationAdapter {
 
@@ -17,7 +18,13 @@ public class Main extends ApplicationAdapter {
     @Override
     public void render() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        game.render(Gdx.graphics.getDeltaTime());
+        float dt = Gdx.graphics.getDeltaTime();
+
+        // CORREÇÃO: Chamada para a lógica
+        game.update(dt);
+
+        // Chamada para o desenho
+        game.render(dt);
     }
 
     @Override
